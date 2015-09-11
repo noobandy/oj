@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+	<bean id="customUserDetailsService" class="in.anandm.oj.service.CustomUserDetailsService">
+		<constructor-arg name="userRepository" ref="JPAUserRepository" />
+	</bean>
+
+	<bean id="BCryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	</bean>
+	<security:authentication-manager id="authenticationManager">
+		<security:authentication-provider
+			user-service-ref="customUserDetailsService">
+			<security:password-encoder ref="BCryptPasswordEncoder">
+			</security:password-encoder>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean id="loggingAuthenticationSuccessHandler"
+		class="in.anandm.oj.listener.LoggingAuthenticationSuccessHandler">
+
+	</bean>
+
+	<bean id="loggingAuthenticationFailureHandler"
+		class="in.anandm.oj.listener.LoggingAuthenticationFailureHandler">
+
+	</bean>
+	<security:http authentication-manager-ref="authenticationManager"
+		auto-config="true" create-session="ifRequired" use-expressions="true"
+		disable-url-rewriting="true">
+		<security:form-login login-page="/"
+			username-parameter="emailId" password-parameter="password"
+			authentication-failure-handler-ref="loggingAuthenticationFailureHandler"
+			authentication-success-handler-ref="loggingAuthenticationSuccessHandler" />
+		<security:remember-me user-service-ref="customUserDetailsService"
+			data-source-ref="comboPooledDataSource" />
+
+		<security:intercept-url pattern="/todo/*"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/login/changePassword"
+			access="isAuthenticated()" />
+	</security:http>
+</beans>
