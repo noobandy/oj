@@ -70,12 +70,13 @@ public class ProblemUploadHelper {
                     constraintsFile));
 
             String line = null;
-
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("=");
+                if (tokens[0].startsWith("TL")) {
+
+                }
 
             }
-
             Problem problem = new Problem();
 
             problem.setProblemStatementFilePath(storageDirectory
