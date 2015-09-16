@@ -50,13 +50,28 @@
 		<constructor-arg ref="metadataUtil" />
 	</bean>
 
-	<bean abstract="true" id="baseJPARepository"
-		class="in.anandm.oj.repository.impl.BaseJPARepository">
+	<bean abstract="true" id="JPABaseRepository"
+		class="in.anandm.oj.repository.impl.JPABaseRepository">
 		<property name="searchProcessor" ref="searchProcessor" />
 	</bean>
 
-	<bean parent="baseJPARepository" id="JPAUserRepository"
+	<bean parent="JPABaseRepository" id="JPAUserRepository"
 		class="in.anandm.oj.repository.impl.JPAUserRepository">
+	</bean>
 
+	<bean parent="JPABaseRepository" id="JPAProblemRepository"
+		class="in.anandm.oj.repository.impl.JPAProblemRepository">
+	</bean>
+
+	<bean parent="JPABaseRepository" id="JPATestCaseRepository"
+		class="in.anandm.oj.repository.impl.JPATestCaseRepository">
+	</bean>
+
+	<bean parent="JPABaseRepository" id="JPASolutionRepository"
+		class="in.anandm.oj.repository.impl.JPASolutionRepository">
+	</bean>
+
+	<bean parent="JPABaseRepository" id="JPAEvaluationResultRepository"
+		class="in.anandm.oj.repository.impl.JPAEvaluationResultRepository">
 	</bean>
 </beans>

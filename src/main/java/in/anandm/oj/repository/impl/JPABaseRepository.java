@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import com.googlecode.genericdao.dao.jpa.GenericDAOImpl;
 import com.googlecode.genericdao.search.jpa.JPASearchProcessor;
 
-public class BaseJPARepository<T, ID extends Serializable> extends
+public class JPABaseRepository<T, ID extends Serializable> extends
         GenericDAOImpl<T, ID> {
 
     @Override

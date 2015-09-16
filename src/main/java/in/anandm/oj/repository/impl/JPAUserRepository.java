@@ -7,7 +7,7 @@ import in.anandm.oj.repository.UserRepository;
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.Search;
 
-public class JPAUserRepository extends BaseJPARepository<User, String> implements
+public class JPAUserRepository extends JPABaseRepository<User, String> implements
         UserRepository {
 
     @Override

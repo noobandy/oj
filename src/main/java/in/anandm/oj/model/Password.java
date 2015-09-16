@@ -1,10 +1,3 @@
-/**
- * @filenameName:in.anandm.todo.model.Password.java
- * @description:TODO
- * @author anandm
- * @date Aug 13, 2015 11:06:02 AM
- * @version: TODO
- */
 package in.anandm.oj.model;
 
 import java.util.regex.Matcher;
@@ -15,12 +8,6 @@ import javax.persistence.Embeddable;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-/**
- * @className:in.anandm.todo.model.Password.java
- * @description:TODO
- * @author anandm
- * @date Aug 13, 2015 11:06:02 AM
- */
 @Embeddable
 public class Password {
 

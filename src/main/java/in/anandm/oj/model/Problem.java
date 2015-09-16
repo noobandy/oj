@@ -25,8 +25,8 @@ public class Problem implements Serializable {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "problem_statement")
-    private String problemStatement;
+    @Column(name = "problem_statement_file_path")
+    private String problemStatementFilePath;
 
     // bytes
     @Column(name = "max_solution_size_limit")
@@ -40,12 +40,12 @@ public class Problem implements Serializable {
 
     }
 
-    public String getProblemStatement() {
-        return problemStatement;
+    public String getProblemStatementFilePath() {
+        return problemStatementFilePath;
     }
 
-    public void setProblemStatement(String problemStatement) {
-        this.problemStatement = problemStatement;
+    public void setProblemStatementFilePath(String problemStatementFilePath) {
+        this.problemStatementFilePath = problemStatementFilePath;
     }
 
     public long getMaxSolutionSizeLimit() {

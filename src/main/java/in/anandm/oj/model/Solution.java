@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -33,6 +35,10 @@ public class Solution implements Serializable {
     @Column(name = "solution_file_path")
     private String solutionFilePath;
 
+    @Column(name = "language")
+    @Enumerated(EnumType.STRING)
+    private Language language;
+
     @ManyToOne
     @JoinColumn(name = "problem_id")
     private Problem problem;
@@ -48,6 +54,13 @@ public class Solution implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "evaluated_at")
     private Date evaluatedAt;
+
+    @Column(name = "compilation_errors")
+    private String compilationErrors;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EvaluationResultStatus status;
 
     /**
      * 
@@ -103,6 +116,30 @@ public class Solution implements Serializable {
 
     public void setEvaluatedAt(Date evaluatedAt) {
         this.evaluatedAt = evaluatedAt;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public String getCompilationErrors() {
+        return compilationErrors;
+    }
+
+    public void setCompilationErrors(String compilationErrors) {
+        this.compilationErrors = compilationErrors;
+    }
+
+    public EvaluationResultStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EvaluationResultStatus status) {
+        this.status = status;
     }
 
 }

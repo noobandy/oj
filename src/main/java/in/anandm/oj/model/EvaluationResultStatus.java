@@ -2,5 +2,5 @@ package in.anandm.oj.model;
 
 public enum EvaluationResultStatus {
 
-    CE, RE, TLE, MLE, AC;
+    CE, RE, TLE, MLE, AC, WO;
 }
