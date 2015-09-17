@@ -30,9 +30,9 @@ public final class FileUtils {
 
     }
 
-    private static final void copy(InputStream is,
-                                   OutputStream os,
-                                   int bufferSize) throws IOException {
+    public static final void copy(InputStream is,
+                                  OutputStream os,
+                                  int bufferSize) throws IOException {
         BufferedInputStream bis = new BufferedInputStream(is);
 
         BufferedOutputStream bos = new BufferedOutputStream(os);

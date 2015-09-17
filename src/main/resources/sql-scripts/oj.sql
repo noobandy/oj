@@ -29,6 +29,8 @@ CREATE TABLE `evaluation_result` (
 
 /*Data for the table `evaluation_result` */
 
+insert  into `evaluation_result`(`id`,`status`,`solution_id`,`test_case_id`) values ('402894484fdb2053014fdb205a5e0001','AC','402894484fdb2053014fdb2057860000','402894484fdb1c0c014fdb1c0f700001'),('402894484fdb2053014fdb205ac60002','AC','402894484fdb2053014fdb2057860000','402894484fdb1c0c014fdb1c0f7c0002');
+
 /*Table structure for table `persistent_logins` */
 
 DROP TABLE IF EXISTS `persistent_logins`;
@@ -53,10 +55,17 @@ CREATE TABLE `problem` (
   `id` varchar(255) collate utf8_unicode_ci NOT NULL,
   `max_solution_size_limit` bigint(20) default NULL,
   `problem_statement` text collate utf8_unicode_ci,
-  PRIMARY KEY  (`id`)
+  `max_memory_limit` bigint(20) default NULL,
+  `max_time_limit` bigint(20) default NULL,
+  `user_id` varchar(255) collate utf8_unicode_ci default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `FKED8CC29F89C12130` (`user_id`),
+  CONSTRAINT `FKED8CC29F89C12130` FOREIGN KEY (`user_id`) REFERENCES `user` (`email_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `problem` */
+
+insert  into `problem`(`id`,`max_solution_size_limit`,`problem_statement`,`max_memory_limit`,`max_time_limit`,`user_id`) values ('402894484fdb1c0c014fdb1c0f1e0000',5000,'Write a program to calculate square of a given number N.Input : first line of input contains no of test cases T.then each line contains number N.Ouput : each line contains sqare of input N.Examle :Input : 235Output :925Exlaination: first line 2 (2 test cases)then each input 3 and 5 on seperate line.their output 3^2 = 95^2 = 25',1500000000,1000,NULL);
 
 /*Table structure for table `solution` */
 
@@ -68,15 +77,20 @@ CREATE TABLE `solution` (
   `solution_file_path` varchar(255) collate utf8_unicode_ci default NULL,
   `submitted_at` datetime default NULL,
   `problem_id` varchar(255) collate utf8_unicode_ci default NULL,
-  `username` varchar(255) collate utf8_unicode_ci default NULL,
+  `compilation_errors` varchar(255) collate utf8_unicode_ci default NULL,
+  `language` varchar(255) collate utf8_unicode_ci default NULL,
+  `status` varchar(255) collate utf8_unicode_ci default NULL,
+  `user_id` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`),
-  KEY `FK58ED4D7982AFBBF7` (`username`),
   KEY `FK58ED4D7914B8EA44` (`problem_id`),
-  CONSTRAINT `FK58ED4D7914B8EA44` FOREIGN KEY (`problem_id`) REFERENCES `problem` (`id`),
-  CONSTRAINT `FK58ED4D7982AFBBF7` FOREIGN KEY (`username`) REFERENCES `user` (`email_id`)
+  KEY `FK58ED4D7989C12130` (`user_id`),
+  CONSTRAINT `FK58ED4D7989C12130` FOREIGN KEY (`user_id`) REFERENCES `user` (`email_id`),
+  CONSTRAINT `FK58ED4D7914B8EA44` FOREIGN KEY (`problem_id`) REFERENCES `problem` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `solution` */
+
+insert  into `solution`(`id`,`evaluated_at`,`solution_file_path`,`submitted_at`,`problem_id`,`compilation_errors`,`language`,`status`,`user_id`) values ('402894484fdb2053014fdb2057860000','2015-09-17 17:16:14','0c/39/d2/1d/1442490373717/solution','2015-09-17 17:16:14','402894484fdb1c0c014fdb1c0f1e0000','','JAVA','AC','anandm@mkcl.org');
 
 /*Table structure for table `test_case` */
 
@@ -85,8 +99,6 @@ DROP TABLE IF EXISTS `test_case`;
 CREATE TABLE `test_case` (
   `id` varchar(255) collate utf8_unicode_ci NOT NULL,
   `input_file_path` varchar(255) collate utf8_unicode_ci default NULL,
-  `max_memory_limit` bigint(20) default NULL,
-  `max_time_limit` bigint(20) default NULL,
   `output_file_path` varchar(255) collate utf8_unicode_ci default NULL,
   `problem_id` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`),
@@ -95,6 +107,8 @@ CREATE TABLE `test_case` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `test_case` */
+
+insert  into `test_case`(`id`,`input_file_path`,`output_file_path`,`problem_id`) values ('402894484fdb1c0c014fdb1c0f700001','1a/13/73/96/1442490093264/test0.in.txt','1a/13/73/96/1442490093264/test0.out.txt','402894484fdb1c0c014fdb1c0f1e0000'),('402894484fdb1c0c014fdb1c0f7c0002','1a/13/73/96/1442490093264/test1.in.txt','1a/13/73/96/1442490093264/test1.out.txt','402894484fdb1c0c014fdb1c0f1e0000');
 
 /*Table structure for table `test_case_extra_data` */
 

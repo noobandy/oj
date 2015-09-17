@@ -3,6 +3,7 @@ package in.anandm.oj.model;
 import in.anandm.oj.repository.EvaluationResultRepository;
 import in.anandm.oj.repository.SolutionRepository;
 import in.anandm.oj.repository.TestCaseRepository;
+import in.anandm.oj.service.PathHelper;
 import in.anandm.oj.utils.FileUtils;
 
 import java.io.File;
@@ -11,58 +12,57 @@ import java.util.List;
 
 public abstract class AbstractJudge implements Judge {
 
-    private String stagingDirectoryPath;
+    protected PathHelper pathHelper;
 
-    private TestCaseRepository testCaseRepository;
+    protected TestCaseRepository testCaseRepository;
 
-    private EvaluationResultRepository evaluationResultRepository;
+    protected EvaluationResultRepository evaluationResultRepository;
 
-    private SolutionRepository solutionRepository;
+    protected SolutionRepository solutionRepository;
 
     /**
+     * @param pathHelper
      * @param testCaseRepository
      * @param evaluationResultRepository
      * @param solutionRepository
      */
-    public AbstractJudge(TestCaseRepository testCaseRepository,
+    public AbstractJudge(PathHelper pathHelper,
+            TestCaseRepository testCaseRepository,
             EvaluationResultRepository evaluationResultRepository,
             SolutionRepository solutionRepository) {
         super();
+        this.pathHelper = pathHelper;
         this.testCaseRepository = testCaseRepository;
         this.evaluationResultRepository = evaluationResultRepository;
         this.solutionRepository = solutionRepository;
     }
 
-    public String getStagingDirectoryPath() {
-        return stagingDirectoryPath;
-    }
-
-    public void setStagingDirectoryPath(String stagingDirectoryPath) {
-        this.stagingDirectoryPath = stagingDirectoryPath;
-    }
-
     @Override
-    public EvaluationResultStatus evaluate(String solutionId) {
+    public Solution evaluate(Solution solution) {
+        String stagingDirectoryPath = solution.getId();
         try {
 
-            Solution solution = solutionRepository.getSolution(solutionId);
-
-            File stagingArea = new File(stagingDirectoryPath + File.separator
-                    + solution.getId());
+            File stagingArea = new File(
+                    pathHelper
+                            .absoluteStagingDirectoryPath(stagingDirectoryPath));
             // create directory
-            stagingArea.createNewFile();
+            stagingArea.mkdirs();
 
             // copy the solution to staging area
 
-            File source = new File(solution.getSolutionFilePath());
+            File source = new File(pathHelper.absoluteFilePath(solution
+                    .getSolutionFilePath()));
 
-            File destination = new File(stagingDirectoryPath + File.separator
-                    + solution.getId() + File.separator + sourceFileName());
+            String stagingFilePath = pathHelper.stagingFilePath(
+                    stagingDirectoryPath, sourceFileName());
+
+            File destination = new File(
+                    pathHelper.absoluteStagingFilePath(stagingFilePath));
 
             FileUtils.copyFile(source, destination, 1024);
 
             // compile the solution
-            String compilationErrors = compile(stagingArea);
+            String compilationErrors = compile(stagingDirectoryPath);
 
             EvaluationResultStatus resultStatus = EvaluationResultStatus.AC;
 
@@ -75,7 +75,10 @@ public abstract class AbstractJudge implements Judge {
 
                 for (TestCase testCase : testCases) {
 
-                    EvaluationResultStatus status = test(stagingArea, testCase);
+                    EvaluationResultStatus status = test(
+                            stagingDirectoryPath, testCase,
+                            problem.getMaxTimeLimit(),
+                            problem.getMaxMemoryLimit());
 
                     if (status == EvaluationResultStatus.MLE
                             || status == EvaluationResultStatus.TLE
@@ -100,16 +103,39 @@ public abstract class AbstractJudge implements Judge {
             }
 
             solution.setEvaluatedAt(new Date());
-            solution.setStatus(EvaluationResultStatus.CE);
+            solution.setStatus(resultStatus);
             solution.setCompilationErrors(compilationErrors);
 
             solutionRepository.saveSolution(solution);
 
-            return resultStatus;
+            return solution;
         }
         catch (Exception e) {
             throw new ApplicationException("failed to judge solution id : "
-                    + solutionId);
+                    + solution.getId());
+        }
+        finally {
+
+            delete(new File(
+                    pathHelper
+                            .absoluteStagingDirectoryPath(stagingDirectoryPath)));
+        }
+
+    }
+
+    private void delete(File file) {
+
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                for (File nestedFile : file.listFiles()) {
+                    delete(nestedFile);
+                }
+
+                file.delete();
+            }
+            else {
+                file.delete();
+            }
         }
 
     }
@@ -126,8 +152,10 @@ public abstract class AbstractJudge implements Judge {
      * @return empty string if compilation was successful else returns
      *         compilation errors
      */
-    public abstract String compile(File stagingArea);
+    public abstract String compile(String stagingDirectoryPath);
 
-    public abstract EvaluationResultStatus test(File stagingArea,
-                                                TestCase testCase);
+    public abstract EvaluationResultStatus test(String stagingDirectoryPath,
+                                                TestCase testCase,
+                                                long timeLimit,
+                                                long memoryLimit);
 }

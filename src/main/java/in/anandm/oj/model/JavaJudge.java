@@ -3,6 +3,7 @@ package in.anandm.oj.model;
 import in.anandm.oj.repository.EvaluationResultRepository;
 import in.anandm.oj.repository.SolutionRepository;
 import in.anandm.oj.repository.TestCaseRepository;
+import in.anandm.oj.service.PathHelper;
 import in.anandm.oj.utils.FileUtils;
 
 import java.io.BufferedReader;
@@ -18,14 +19,16 @@ import java.util.TimerTask;
 public class JavaJudge extends AbstractJudge {
 
     /**
+     * @param pathHelper
      * @param testCaseRepository
      * @param evaluationResultRepository
      * @param solutionRepository
      */
-    public JavaJudge(TestCaseRepository testCaseRepository,
+    public JavaJudge(PathHelper pathHelper,
+            TestCaseRepository testCaseRepository,
             EvaluationResultRepository evaluationResultRepository,
             SolutionRepository solutionRepository) {
-        super(testCaseRepository, evaluationResultRepository,
+        super(pathHelper, testCaseRepository, evaluationResultRepository,
                 solutionRepository);
 
     }
@@ -43,13 +46,14 @@ public class JavaJudge extends AbstractJudge {
     }
 
     @Override
-    public String compile(File stagingArea) {
+    public String compile(String stagingDirectoryPath) {
         try {
 
             ProcessBuilder processBuilder = new ProcessBuilder("javac",
                     sourceFileName());
 
-            processBuilder.directory(stagingArea);
+            processBuilder.directory(new File(pathHelper
+                    .absoluteStagingDirectoryPath(stagingDirectoryPath)));
 
             Process process = processBuilder.start();
 
@@ -75,25 +79,42 @@ public class JavaJudge extends AbstractJudge {
         }
         catch (Exception e) {
             throw new ApplicationException("failed to compile staging area : "
-                    + stagingArea, e);
+                    + stagingDirectoryPath, e);
         }
     }
 
     @Override
-    public EvaluationResultStatus test(File stagingArea, TestCase testCase) {
+    public EvaluationResultStatus test(String stagingDirectoryPath,
+                                       TestCase testCase,
+                                       long timeLimit,
+                                       long memoryLimit) {
         try {
+
             String outputFileName = testCase.getId() + ".out.txt";
 
-            File runScript = new File(stagingArea + File.separator + "run.bat");
+            String outputFilePath = pathHelper.stagingFilePath(
+                    stagingDirectoryPath, outputFileName);
+
+            String scriptFilePath = pathHelper.stagingFilePath(
+                    stagingDirectoryPath, "run.bat");
+
+            File runScript = new File(
+                    pathHelper.absoluteStagingFilePath(scriptFilePath));
+
             BufferedWriter writer = new BufferedWriter(
                     new FileWriter(runScript));
+            writer.write("echo off");
+            writer.write(System.getProperty("line.separator"));
             writer.write("java " + executableFileName() + " < "
-                    + testCase.getInputFilePath() + " > " + outputFileName);
+                    + pathHelper.absoluteFilePath(testCase.getInputFilePath())
+                    + " > " + outputFileName);
             writer.close();
 
-            ProcessBuilder processBuilder = new ProcessBuilder("run.bat");
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    pathHelper.absoluteStagingFilePath(scriptFilePath));
 
-            processBuilder.directory(stagingArea);
+            processBuilder.directory(new File(pathHelper
+                    .absoluteStagingDirectoryPath(stagingDirectoryPath)));
 
             final Process process = processBuilder.start();
 
@@ -117,7 +138,7 @@ public class JavaJudge extends AbstractJudge {
                     timer.cancel();
 
                 }
-            }, testCase.getMaxTimeLimit());
+            }, timeLimit);
 
             int exitCode = -1;
 
@@ -131,10 +152,11 @@ public class JavaJudge extends AbstractJudge {
                 // ignore
             }
             if (exitCode == 0) {
-                File result = new File(stagingArea + File.separator
-                        + outputFileName);
+                File result = new File(
+                        pathHelper.absoluteStagingFilePath(outputFilePath));
 
-                File expected = new File(testCase.getOutputFilePath());
+                File expected = new File(pathHelper.absoluteFilePath(testCase
+                        .getOutputFilePath()));
 
                 if (FileUtils.hasSameContent(result, expected)) {
                     return EvaluationResultStatus.AC;
@@ -157,7 +179,7 @@ public class JavaJudge extends AbstractJudge {
         catch (Exception e) {
             throw new ApplicationException(
                     "failed to execute test case, staging area : "
-                            + stagingArea + " , test case id : "
+                            + stagingDirectoryPath + " , test case id : "
                             + testCase.getId(), e);
         }
     }

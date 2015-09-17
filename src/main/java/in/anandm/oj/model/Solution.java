@@ -44,8 +44,8 @@ public class Solution implements Serializable {
     private Problem problem;
 
     @ManyToOne
-    @JoinColumn(name = "username")
-    private User user;
+    @JoinColumn(name = "user_id")
+    private User author;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "submitted_at")
@@ -94,12 +94,12 @@ public class Solution implements Serializable {
         this.problem = problem;
     }
 
-    public User getUser() {
-        return user;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public Date getSubmittedAt() {

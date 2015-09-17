@@ -41,15 +41,6 @@ public class TestCase implements Serializable {
     @Column(name = "output_file_path")
     private String outputFilePath;
 
-    // milliseconds
-
-    @Column(name = "max_time_limit")
-    private long maxTimeLimit;
-
-    // bytes
-    @Column(name = "max_memory_limit")
-    private long maxMemoryLimit;
-
     @ElementCollection
     @CollectionTable(name = "test_case_extra_data",
             joinColumns = { @JoinColumn(name = "test_case_id") })
@@ -79,22 +70,6 @@ public class TestCase implements Serializable {
 
     public void setOutputFilePath(String outputFilePath) {
         this.outputFilePath = outputFilePath;
-    }
-
-    public long getMaxTimeLimit() {
-        return maxTimeLimit;
-    }
-
-    public void setMaxTimeLimit(long maxTimeLimit) {
-        this.maxTimeLimit = maxTimeLimit;
-    }
-
-    public long getMaxMemoryLimit() {
-        return maxMemoryLimit;
-    }
-
-    public void setMaxMemoryLimit(long maxMemoryLimit) {
-        this.maxMemoryLimit = maxMemoryLimit;
     }
 
     public Map<String, String> getExtraData() {

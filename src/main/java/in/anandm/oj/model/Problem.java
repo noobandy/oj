@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -25,12 +27,25 @@ public class Problem implements Serializable {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "problem_statement_file_path")
-    private String problemStatementFilePath;
+    @Column(name = "problem_statement")
+    private String problemStatement;
 
     // bytes
     @Column(name = "max_solution_size_limit")
     private long maxSolutionSizeLimit;
+
+    // milliseconds
+
+    @Column(name = "max_time_limit")
+    private long maxTimeLimit;
+
+    // bytes
+    @Column(name = "max_memory_limit")
+    private long maxMemoryLimit;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
 
     /**
      * 
@@ -38,14 +53,6 @@ public class Problem implements Serializable {
     public Problem() {
         super();
 
-    }
-
-    public String getProblemStatementFilePath() {
-        return problemStatementFilePath;
-    }
-
-    public void setProblemStatementFilePath(String problemStatementFilePath) {
-        this.problemStatementFilePath = problemStatementFilePath;
     }
 
     public long getMaxSolutionSizeLimit() {
@@ -62,6 +69,38 @@ public class Problem implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getProblemStatement() {
+        return problemStatement;
+    }
+
+    public void setProblemStatement(String problemStatement) {
+        this.problemStatement = problemStatement;
+    }
+
+    public long getMaxTimeLimit() {
+        return maxTimeLimit;
+    }
+
+    public void setMaxTimeLimit(long maxTimeLimit) {
+        this.maxTimeLimit = maxTimeLimit;
+    }
+
+    public long getMaxMemoryLimit() {
+        return maxMemoryLimit;
+    }
+
+    public void setMaxMemoryLimit(long maxMemoryLimit) {
+        this.maxMemoryLimit = maxMemoryLimit;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
 }

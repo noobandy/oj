@@ -7,6 +7,8 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
 	<context:component-scan base-package="in.anandm.oj" />
+	<context:property-placeholder
+		location="classpath:env/${spring.active.profile}.properties" />
 	<import resource="persistence-context.xml" />
 	<import resource="security-context.xml" />
 
@@ -15,4 +17,41 @@
 	<bean id="UserService" class="in.anandm.oj.service.impl.UserServiceImpl">
 		<constructor-arg name="userRepository" ref="JPAUserRepository" />
 	</bean>
+
+	<bean id="PathHelper" class="in.anandm.oj.service.PathHelper">
+		<constructor-arg name="storageDirectory" value="${storage.storageDirectory}" />
+		<constructor-arg name="stagingDirectory" value="${staging.stagingDirectory}" />
+	</bean>
+
+	<bean id="ProblemUploadHelper" class="in.anandm.oj.service.ProblemUploadHelper">
+		<constructor-arg name="problemRepository" ref="JPAProblemRepository" />
+		<constructor-arg name="testCaseRepository" ref="JPATestCaseRepository" />
+		<constructor-arg name="pathHelper" ref="PathHelper" />
+	</bean>
+
+	<bean id="SolutionUploadHelper" class="in.anandm.oj.service.SolutionUploadHelper">
+		<constructor-arg name="pathHelper" ref="PathHelper" />
+	</bean>
+
+
+	<bean id="JavaJudge" class="in.anandm.oj.model.JavaJudge">
+		<constructor-arg name="solutionRepository" ref="JPASolutionRepository" />
+		<constructor-arg name="evaluationResultRepository"
+			ref="JPAEvaluationResultRepository" />
+		<constructor-arg name="testCaseRepository" ref="JPATestCaseRepository" />
+		<constructor-arg name="pathHelper" ref="PathHelper" />
+	</bean>
+
+	<bean id="SubmissionService" class="in.anandm.oj.service.impl.SubmissionServiceImpl">
+		<constructor-arg name="problemRepository" ref="JPAProblemRepository" />
+		<constructor-arg name="solutionRepository" ref="JPASolutionRepository" />
+		<constructor-arg name="solutionUploadHelper" ref="SolutionUploadHelper" />
+		<constructor-arg name="userRepository" ref="JPAUserRepository" />
+		<property name="judges">
+			<map key-type="in.anandm.oj.model.Language">
+				<entry key="JAVA" value-ref="JavaJudge" />
+			</map>
+		</property>
+	</bean>
+
 </beans>
