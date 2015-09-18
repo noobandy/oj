@@ -33,7 +33,7 @@ public class HomeController extends BaseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Locale locale, Model model) {
         if (isAuthenticated()) {
-            return "redirect:/todo/todos";
+            return "redirect:/problem";
         }
         RegistrationCommand registrationCommand = new RegistrationCommand();
         model.addAttribute("registrationCommand", registrationCommand);

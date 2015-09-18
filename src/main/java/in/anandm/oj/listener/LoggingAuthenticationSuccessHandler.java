@@ -23,6 +23,6 @@ public class LoggingAuthenticationSuccessHandler implements
         LoggerFactory.getLogger(getClass()).info(
                 "{} logged in successfully from ip : {}", emailId, ip);
 
-        response.sendRedirect(request.getContextPath() + "/todo/todos");
+        response.sendRedirect(request.getContextPath() + "/problem");
     }
 }

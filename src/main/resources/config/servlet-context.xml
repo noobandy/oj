@@ -38,7 +38,7 @@
 		<beans:property name="cookieName" value="locale_name" />
 	</beans:bean>
 
-	<beans:bean id="localeChangeInterceptor"
+	<beans:bean  id="localeChangeInterceptor"
 		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 		<beans:property name="paramName" value="lang" />
 	</beans:bean>
@@ -47,7 +47,4 @@
 	</interceptors>
 
 	<context:component-scan base-package="in.anandm.oj.controller" />
-
-
-
 </beans:beans>

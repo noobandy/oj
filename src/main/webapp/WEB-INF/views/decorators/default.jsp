@@ -4,7 +4,11 @@
 <html>
 <head>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+	href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap-paper.min.css">
+<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/jquery/jquery-2.1.4.js"></script>
+<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>	
 <title><sitemesh:write property="title" /></title>
 <style type="text/css">
 .verticalLine {
@@ -23,9 +27,5 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/jquery/jquery.min.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
