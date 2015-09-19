@@ -14,7 +14,7 @@ public class ProblemController extends BaseController {
         return "problem/index";
     }
 
-    @RequestMapping(value = "/${problemId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{problemId}", method = RequestMethod.GET)
     public String problem() {
 
         return "problem/problem";

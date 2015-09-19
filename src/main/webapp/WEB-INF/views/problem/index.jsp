@@ -2,14 +2,13 @@
 <!doctype html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/DataTables/datatables.css"/>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/DataTables/datatables.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/bootstrap-contextmenu/bootstrap-contextmenu.js"></script>
 <title><spring:message code="problem.indexpage.title" /></title>
 </head>
 
 <body>
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-12">
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs nav-justified" role="tablist">
 				<li role="presentation" class="active"><a href="#beginner-problem"
@@ -29,12 +28,27 @@
 						<thead>
 							<tr>
 								<th>Problem</th>
-								<th>Successful Submissions</th>
+								<th><a href="?order=asc">  Successful Submissions </a></th>
 							</tr>
 						</thead>
 						<tbody>
 						</tbody>
 					</table>
+					<nav>
+						<ul class="pagination pagination-lg pull-right">
+							<li><a href="#" aria-label="Previous"> <span
+									aria-hidden="true">&laquo;</span>
+							</a></li>
+							<li><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#">5</a></li>
+							<li><a href="#" aria-label="Next"> <span
+									aria-hidden="true">&raquo;</span>
+							</a></li>
+						</ul>
+					</nav>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="easy-problem">...</div>
 				<div role="tabpanel" class="tab-pane" id="medium-problem">...</div>
@@ -42,20 +56,16 @@
 			</div>
 
 		</div>
-		<div class="col-md-4 verticalLine">
-			<button id="notification-button" class="btn btn-block btn-primary" type="button">
-				Notifications <span class="badge">30</span>
-			</button>
-			<hr/>
-			<div id="notification-list">
-				
-			</div>
-		</div>
+	</div>
+	<div id="context-menu">
+		<ul class="dropdown-menu" role="menu">
+			<li><a tabindex="-1" href="#"><i class="glyphicon glyphicon-plus"></i> To-Do</a></li>
+		</ul>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			for(var i = 0; i < 100; i++) {
-				var className = "";
+				var className = "pending-problem";
 				
 				
 				if(i % 2 == 0) {
@@ -66,7 +76,7 @@
 					className = "danger";
 				}
 				
-				$("#problem-table > tbody").append($("<tr/>").addClass(className).append($("<td />").html("Problem "+i)).append($("<td/>").html(i)));
+				$("#problem-table > tbody").append($("<tr/>").addClass(className).append($("<td />").append($("<a href='${pageContext.request.contextPath}/problem/problemId'/>").html("Problem "+i))).append($("<td/>").html(i)));
 			}
 			
 			$("#notification-button").click(function() {
@@ -82,17 +92,31 @@
 				$(this).find("span.badge").html("");
 			});
 			
-			$("#problem-table").DataTable( {
+			$(".pending-problem").contextmenu({
+				target:'#context-menu', 
+				before: function(e,context) {
+				  // execute code before context menu if shown
+				},
+				onItem: function(context,e) {
+				  // execute on menu item selection
+				  e.preventDefault();
+				}
+			});
+			
+			/* $("#problem-table").DataTable( {
 				info : false,
 				searching : false,
 				lengthChange: false,
+				ordering: true,
+				pageLength: 50,
+				order : [[1,"asc"]],
 				columnDefs : [ {
 					targets : 0,
 					orderable : false
 				}, {
 					
 				}]
-			});
+			}); */
 		});
 	</script>
 </body>

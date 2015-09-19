@@ -41,8 +41,12 @@
 		<security:remember-me user-service-ref="customUserDetailsService"
 			data-source-ref="comboPooledDataSource" />
 
-		<security:intercept-url pattern="/todo/*"
+		<security:intercept-url pattern="/problem*"
 			access="isAuthenticated()" />
+		<security:intercept-url pattern="/submission*"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/scoreboard*"
+			access="isAuthenticated()" />		
 		<security:intercept-url pattern="/login/changePassword"
 			access="isAuthenticated()" />
 	</security:http>
