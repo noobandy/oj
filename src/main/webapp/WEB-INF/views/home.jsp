@@ -10,7 +10,6 @@
 </title>
 </head>
 <body>
-
 	<spring:message code="User.emailId" var="emailIdPlaceHolder" />
 	<spring:message code="User.password" var="passwordPlaceHolder" />
 	<spring:message code="User.repeatPassword"

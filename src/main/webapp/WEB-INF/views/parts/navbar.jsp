@@ -28,6 +28,11 @@
 						<li><a href="?lang=hi">Hindi</a></li>
 						<li><a href="?lang=en">English</a></li>
 					</ul></li>
+				<security:authorize access="hasRole('PROBLEM_SETTER_ROLE')">
+					<li>
+					<a
+						href="${pageContext.request.contextPath}/problem/add"> <i class="glyphicon glyphicon-upload"></i> Upload Problem</a></li>
+				</security:authorize>	
 			</ul>
 
 			<security:authorize access="isAnonymous()">

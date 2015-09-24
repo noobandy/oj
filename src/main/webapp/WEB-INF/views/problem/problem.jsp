@@ -8,10 +8,19 @@
 <body>
 	<div class="row">
 		<div class="col-md-12">
+			<ol class="breadcrumb">
+				<li><a href="${pageContext.request.contextPath}/">Home</a></li>
+				<li><a href="${pageContext.request.contextPath}/problem">Problem</a></li>
+				<li class="active"><a href="${pageContext.request.contextPath}/problem/${problemCode}">Problem Code</a> </li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
 			<div class="btn-group">
-				<a class="btn btn-dfault"> <spring:message
+				<a href="problemId/submission/add" class="btn btn-dfault"> <spring:message
 						code="problem.problempage.submitsolution" />
-				</a> <a class="btn btn-dfault"> <spring:message
+				</a> <a href="problemId/submission" class="btn btn-dfault"> <spring:message
 						code="problem.problempage.allsubmissions" />
 				</a>
 			</div>
@@ -80,7 +89,7 @@
 						append($("<td/>").html( i * 10)).
 						append($("<td/>").html( i * 10)).
 						append($("<td/>").html( "Java")).
-						append($("<td/>").append($("<a/>").addClass("btn btn-default").html("View")))
+						append($("<td/>").append($("<a href='${pageContext.request.contextPath}/problem/${problemCode}/submission/submissionId'/>").addClass("btn btn-default").html("View")))
 						);
 			}
 			

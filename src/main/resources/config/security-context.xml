@@ -43,10 +43,11 @@
 
 		<security:intercept-url pattern="/problem*"
 			access="isAuthenticated()" />
-		<security:intercept-url pattern="/submission*"
-			access="isAuthenticated()" />
-		<security:intercept-url pattern="/scoreboard*"
-			access="isAuthenticated()" />		
+		<security:intercept-url pattern="/problem/**"
+			access="isAuthenticated()" />	
+	
+		<security:intercept-url pattern="/scoreboard/**"
+			access="isAuthenticated()" />				
 		<security:intercept-url pattern="/login/changePassword"
 			access="isAuthenticated()" />
 	</security:http>

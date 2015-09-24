@@ -14,6 +14,11 @@
 
 	<bean id="RegistrationCommandValidator" class="in.anandm.oj.validator.RegistrationCommandValidator">
 	</bean>
+
+	<bean id="SolutionSubmissionCommandValidator"
+		class="in.anandm.oj.validator.SolutionSubmissionCommandValidator">
+
+	</bean>
 	<bean id="UserService" class="in.anandm.oj.service.impl.UserServiceImpl">
 		<constructor-arg name="userRepository" ref="JPAUserRepository" />
 	</bean>
@@ -49,7 +54,7 @@
 		<constructor-arg name="userRepository" ref="JPAUserRepository" />
 		<property name="judges">
 			<map key-type="in.anandm.oj.model.Language">
-				<entry key="JAVA" value-ref="JavaJudge" />
+				<entry key="Java" value-ref="JavaJudge" />
 			</map>
 		</property>
 	</bean>

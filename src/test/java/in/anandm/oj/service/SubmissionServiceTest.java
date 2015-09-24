@@ -20,7 +20,7 @@ public class SubmissionServiceTest extends AbstractTest {
     public void testSubmitSolution() {
         SolutionSubmissionCommand command = new SolutionSubmissionCommand();
         command.setProblemId("402894484fdb1c0c014fdb1c0f1e0000");
-        command.setLanguage(Language.JAVA);
+        command.setLanguage(Language.Java);
         command.setUsername("anandm@mkcl.org");
         command.setSolutionFile(new MultiPartFileStub(
                 "E:\\WorkData\\workspace\\online-judge\\src\\test\\java\\Main.java"));
